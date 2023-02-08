@@ -1,29 +1,65 @@
-﻿
-namespace Текстовый_Конвертер228
+﻿namespace змейка
 {
     internal class Program
-    { 
-        public static void Main()
+    {
+
+        public void logicOfGame(int mode)
         {
-            Igrushky kukla = new Igrushky();
-            kukla.Name = "Кукла";
-            kukla.kolichestvo = 10;
-            kukla.vid = "фарфоровые";
-            Igrushky myshka = new Igrushky();
-            myshka.Name = "Мишка";
-            myshka.kolichestvo = 6;
-            myshka.vid = "Плюшевые";
-            Igrushky mashynki = new Igrushky();
-            mashynki.Name = "Машинка";
-            mashynki.kolichestvo = 74;
-            mashynki.vid = "Пластмасовые";
-            List<Igrushky> list = new List<Igrushky>();
-            list.Add(new Igrushky() { Name = "Кукла", kolichestvo = 10, vid = "фарфоровые" });
-            list.Add(new Igrushky() { Name = "Мишка", kolichestvo = 6, vid = "Плюшевые" });
-            list.Add(new Igrushky() { Name = "Машинка", kolichestvo = 74, vid = "Пластмасовые" });
-            Console.WriteLine("Введите путь до файла (вместе с названием), который вы хотите открыть");
-            Console.WriteLine("-------------------------------------------------------------------------");
-            SaveFile.ReadFile(list);
+            //Поле = new Поле();
+            tailX[0] = x;
+            tailY[0] = y;
+            int prevx = tailX[0];
+            int prevy = tailY[0];
+            int prev2X, prev2Y;
+            for (int i = 1; i < ntail; i++)
+            {
+                prev2X = tailX[i];
+                prev2Y = tailY[i];
+                tailX[i] = prevx;
+                tailY[i] = prevy;
+                prevx = prev2X;
+                prevy = prev2Y;
+            }
+            switch (dir)
+            {
+                case EActiv.LEFT:
+                    x--;
+                    break;
+                case EActiv.RIGHT:
+                    x++;
+                    break;
+                case EActiv.DOWN:
+                    y++;
+                    break;
+                case EActiv.UP:
+                    y--;
+                    break;
+
+            }
+            if (mode == 2)
+            {
+                if (x == width || x == 0 || y == height || y == 0)
+                {
+                    gameOver = true;
+                }
+            }
+            if (mode == 1 || mode == 0)
+            {
+                if (x >= width)
+                    x = 0;
+                else if (x < 0)
+                    x = width - 1;
+                if (y >= height)
+                    y = 0;
+                else if (y < 0)
+                    y = height - 1;
+            }
+            for (int i = 0; i < ntail; i++)
+            {
+                if (tailX[i] == x && tailY[i] == y)
+                {
+                    gameOver = true;
+                }
+            }
         }
-    }
 }
