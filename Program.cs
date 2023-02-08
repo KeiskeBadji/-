@@ -1,190 +1,93 @@
-﻿Console.WriteLine("Нажмите для выбора октавы от F1-F6");
+﻿Console.WriteLine();
+int position = 1;
 ConsoleKeyInfo clavisha = Console.ReadKey();
 ConsoleKeyInfo key = Console.ReadKey();
 
-int[] massive_oktava1 = new int[] {38, 41, 43, 46, 49, 51};
-int[] massive_oktava2 = new int[] {77, 82, 87, 92, 98, 103};
-int[] massive_oktava3 = new int[] {155, 164, 174, 185, 196, 207};
-int[] massive_oktava4 = new int[] {311, 329, 349, 370, 392, 415};
-int[] massive_oktava5 = new int[] {622, 659, 698, 740, 784, 830};
-int[] massive_oktava6 = new int[] {1245, 1319, 1397, 1480, 1568, 1661};
-int active_oktava = 1;
-while (key.Key != ConsoleKey.Escape)
+string[] massiv_data1 = new string[] {"1. Сходить к стоматологу", "2. Список продуктов", "3. Список гостей"};
+string[] massiv_data2 = new string[] { };
+string[] massiv_data3 = new string[] { };
+string[] massiv_data4 = new string[] { }; 
+string[] massiv_data5 = new string[] { };
+string[] massiv_data6 = new string[] { };
+string[] massiv_data7 = new string[] { };
+string[] massiv_data8 = new string[] { };
+string[] massiv_data9 = new string[] { };
+string[] massiv_data10 = new string[] { };
+string[] opisanie_data1 = new string[] { "Приём у стоматолога в 17:40", "Купить: молоко \n кукурузу \n зубную пасту", "Придут: Маша \n Кикрилл \n Олег /n Кристина \n Настя \n Денис" }; 
+
+int active_data = 1;
+while(key.Key != ConsoleKey.Escape)
 {
     key = Console.ReadKey();
-    if (key.Key == ConsoleKey.F1)
+    Console.Clear();
+    
+    if (active_data == 1 && key.Key != ConsoleKey.Enter)
     {
-        active_oktava = 1;
-        Console.WriteLine("1 октава");
+        Console.WriteLine("Выбрана дата: 14.10.2022");
+        foreach (string item in massiv_data1)
+        {
+            Console.WriteLine("   " + item);
+        }
     }
-    if (key.Key == ConsoleKey.F2)
+    if (active_data == 2)
     {
-        active_oktava = 2;
-        Console.WriteLine("2 октава");
+        Console.WriteLine("Выбрана дата: 15.10.2022");
     }
-    if (key.Key == ConsoleKey.F3)
+    if (active_data == 3)
     {
-        active_oktava = 3;
-        Console.WriteLine("3 октава");
+        Console.WriteLine("Выбрана дата: 16.10.2022");
     }
-    if (key.Key == ConsoleKey.F4)
+    if (active_data == 4)
     {
-        active_oktava = 4;
-        Console.WriteLine("4 октава");
+        Console.WriteLine("Выбрана дата: 17.10.2022");
     }
-    if (key.Key == ConsoleKey.F5)
+    if (active_data == 5)
     {
-        active_oktava = 5;
-        Console.WriteLine("5 октава");
+        Console.WriteLine("Выбрана дата: 18.10.2022");
     }
-    if (key.Key == ConsoleKey.F6)
+    if (active_data == 0)
     {
-        active_oktava = 6;
-        Console.WriteLine("6 октава");
+        Console.WriteLine("Выбрана дата: 13.10.2022");
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 1))
+    if (active_data == -1)
     {
-        Console.Beep(38, 300);
+        Console.WriteLine("Выбрана дата: 12.10.2022");
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 2))
+    if (active_data == -2)
     {
-        Console.Beep(77, 300);
+        Console.WriteLine("Выбрана дата: 11.10.2022");
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 3))
+    if (active_data == -3)
     {
-        Console.Beep(155, 300);
+        Console.WriteLine("Выбрана дата: 10.10.2022");
+    }if (active_data == -4)
+    {
+        Console.WriteLine("Выбрана дата: 09.10.2022");
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 4))
+    if (key.Key == ConsoleKey.RightArrow)
     {
-        Console.Beep(311, 300);
+        active_data++;
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 5))
+    if (key.Key == ConsoleKey.LeftArrow)
     {
-        Console.Beep(622, 300);
+        active_data--;
     }
-    if ((key.Key == ConsoleKey.Q) && (active_oktava == 6))
+    if (key.Key == ConsoleKey.DownArrow)
     {
-        Console.Beep(1245, 300);
+        position++;
     }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 1))
+    if (key.Key == ConsoleKey.UpArrow)
     {
-        Console.Beep(41, 300);
+        position--;
+
     }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 2))
-    {
-        Console.Beep(82, 300);
-    }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 3))
-    {
-        Console.Beep(164, 300);
-    }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 4))
-    {
-        Console.Beep(329, 300);
-    }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 5))
-    {
-        Console.Beep(659, 300);
-    }
-    if ((key.Key == ConsoleKey.W) && (active_oktava == 6))
-    {
-        Console.Beep(1319, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 1))
-    {
-        Console.Beep(43, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 2))
-    {
-        Console.Beep(87, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 3))
-    {
-        Console.Beep(174, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 4))
-    {
-        Console.Beep(349, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 5))
-    {
-        Console.Beep(698, 300);
-    }
-    if ((key.Key == ConsoleKey.E) && (active_oktava == 6))
-    {
-        Console.Beep(1397, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 1))
-    {
-        Console.Beep(46, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 2))
-    {
-        Console.Beep(92, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 3))
-    {
-        Console.Beep(185, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 4))
-    {
-        Console.Beep(370, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 5))
-    {
-        Console.Beep(740, 300);
-    }
-    if ((key.Key == ConsoleKey.R) && (active_oktava == 6))
-    {
-        Console.Beep(1480, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 1))
-    {
-        Console.Beep(49, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 2))
-    {
-        Console.Beep(98, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 3))
-    {
-        Console.Beep(196, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 4))
-    {
-        Console.Beep(392, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 5))
-    {
-        Console.Beep(792, 300);
-    }
-    if ((key.Key == ConsoleKey.T) && (active_oktava == 6))
-    {
-        Console.Beep(1568, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 1))
-    {
-        Console.Beep(51, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 2))
-    {
-        Console.Beep(103, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 3))
-    {
-        Console.Beep(207, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 4))
-    {
-        Console.Beep(415, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 5))
-    {
-        Console.Beep(830, 300);
-    }
-    if ((key.Key == ConsoleKey.Y) && (active_oktava == 6))
-    {
-        Console.Beep(1661, 300);
+
+    Console.SetCursorPosition(0, position);
+    Console.WriteLine("->");
+    
+    if(key.Key == ConsoleKey.Enter)
+    { 
+            Console.WriteLine(opisanie_data1[position-1]);
     }
     
 }
