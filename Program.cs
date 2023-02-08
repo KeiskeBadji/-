@@ -1,74 +1,274 @@
-﻿using System.Globalization;
-using ArrowName;
+﻿using ConsoleuiNames;
+using allUsers;
+using KeyEvents;
+using AuthTools;
+using System;
 
-namespace Conductor
+namespace MainProgram
 {
-    public static class Count
+    class MainSys
     {
-        public static string Repeat(this string value, int count) => string.Concat(Enumerable.Repeat(value, count));
-    }
-
-    public static class Сonductor
-    {
-        public static void ShowDirConstent(string path)
+        internal enum roles
         {
-            Console.Clear();
-            string[] allDirectories = Directory.GetDirectories(path);
-            string[] allFiles = Directory.GetFiles(path);
+            adm = 0,
+            hrm = 1,
+            cm = 2,
+            csh = 3,
+            accnt = 4
+        }
+        internal enum keys
+        {
+            key_Darr = 40,
+            key_Uarr = 38,
+            key_Ent = 13,
+            key_Esc = 27,
+            key_F1 = 112,
+            key_F2 = 113,
+            key_Bckspc = 8
+        }
+        public static void AuthL()
+        {
 
 
-            foreach (var dir in allDirectories)
+            int coord = 0;
+            int leftstep = 0;
+            int step = 1;
+            string selector = "->";
+            int min = 0;
+            int max = 3;
+            List<string> output = new List<string>();
+            while (true)
             {
-                var creation_date = Directory.GetCreationTime(dir).ToString();
-                var name = new DirectoryInfo(dir).Name;
-                try
+                Console.SetCursorPosition(leftstep, coord);
+                Console.WriteLine(selector);
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                if ((int)key.Key == (int)keys.key_Uarr)
                 {
-                    Console.WriteLine($"  ) Имя папки: {name} " +
-                                      $"{" ".Repeat(5)}|- Дата создания: {creation_date} " +
-                                      $"{" ".Repeat(5)}|- Количество файлов внутри: {Directory.GetFiles(dir).Length}");
+                    if (coord - step >= min)
+                    {
+                        Console.SetCursorPosition(leftstep, coord);
+                        Console.WriteLine("  ");
+                        coord -= step;
+                    }
                 }
-                catch (System.UnauthorizedAccessException)
+                else if ((int)key.Key == (int)keys.key_Darr)
                 {
-                    Console.WriteLine($"  ) Имя файла: {name}" +
-                                      $"{" ".Repeat(5)}|- Дата создания: {creation_date} " +
-                                      $"{" ".Repeat(5)}|- Невозможно получить информацию о файлах внутри директории " +
-                                      $"");
+                    if (coord + step < max)
+                    {
+                        Console.SetCursorPosition(leftstep, coord);
+                        Console.WriteLine("  ");
+                        coord += step;
+
+                    }
                 }
-            }
+                else if ((int)key.Key == (int)keys.key_Ent)
+                {
+                    if (coord == 0)
+                    {
 
-            foreach (var f in allFiles)
-            {
-                var ext = Path.GetExtension(f);
-                var name = Path.GetFileName(f);
-                var namewithoutext = name.Split(".");
-                var creation_date = File.GetCreationTime(f).ToString();
-                Console.WriteLine($"  ) Имя файла: {namewithoutext[0]} " +
-                                  $"{" ".Repeat(5)}|- Расширение файла: {ext} " +
-                                  $"{" ".Repeat(5)}|- Дата создания: {creation_date} ");
+                        int intrcoord = 8;
+                        List<string> letLogin = new List<string>();
+                        while (true)
+                        {
+                            ConsoleKeyInfo intrkeys = Console.ReadKey(true);
+                            if (((int)intrkeys.Key != (int)keys.key_Esc) && ((int)intrkeys.Key != (int)keys.key_Bckspc))
+                            {
+                                Console.SetCursorPosition(intrcoord, 0);
+                                Console.Write(intrkeys.KeyChar);
+                                letLogin.Add(intrkeys.KeyChar.ToString());
+                                intrcoord++;
+                            }
+                            else if ((int)intrkeys.Key == (int)keys.key_Bckspc)
+                            {
+                                if (intrcoord - 1 >= 8)
+                                {
 
+                                    intrcoord--;
+                                    Console.SetCursorPosition(intrcoord, 0);
+                                    Console.Write(" ");
+                                }
+                                if (letLogin.Count > 0)
+                                {
+                                    letLogin.Remove(letLogin.Last());
+                                }
+
+                            }
+                            else
+                            {
+                                output.Add(string.Join("", letLogin));
+                                break;
+                            }
+                        }
+                    }
+                    else if (coord == 1)
+                    {
+                        int intrcoord = 9;
+                        List<string> letPasswd = new List<string>();
+                        while (true)
+                        {
+                            ConsoleKeyInfo intrkeys = Console.ReadKey(true);
+                            if (((int)intrkeys.Key != (int)keys.key_Esc) && ((int)intrkeys.Key != (int)keys.key_Bckspc))
+                            {
+                                Console.SetCursorPosition(intrcoord, 1);
+                                Console.Write("*");
+                                letPasswd.Add(intrkeys.KeyChar.ToString());
+                                intrcoord++;
+                            }
+                            else if ((int)intrkeys.Key == (int)keys.key_Bckspc)
+                            {
+                                if (intrcoord - 1 >= 9)
+                                {
+
+                                    intrcoord--;
+                                    Console.SetCursorPosition(intrcoord, 1);
+                                    Console.Write(" ");
+                                }
+                                if (letPasswd.Count - 1 >= 0)
+                                {
+                                    letPasswd.Remove(letPasswd[letPasswd.Count - 1]);
+                                }
+
+                            }
+                            else
+                            {
+                                output.Add(string.Join("", letPasswd));
+                                break;
+                            }
+                        }
+
+                    }
+                    else if (coord == 2)
+                    {
+                        if (output.Count < 2)
+                        {
+                            Console.SetCursorPosition(0, max + 1);
+                            Console.WriteLine("Не хватает данных для авторизации");
+                        }
+                        else
+                        {
+                            if (Auth.CheckLogin<Admin>(output[0], "db_admin.json") != null)
+                            {
+                                if (Auth.CheckPassword<Admin>(output[1], "db_admin.json"))
+                                {
+                                    Admin.initAdminFuncs(output[0]);
+                                    break;
+                                }
+                                else
+                                {
+                                    output.Clear();
+                                    Console.SetCursorPosition(8, 0);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(9, 1);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(0, max + 1);
+                                    Console.WriteLine("Неверный пароль");
+                                }
+
+                            }
+                            else if (Auth.CheckLogin<HRmanager>(output[0], "db_hr.json") != null)
+                            {
+                                if (Auth.CheckPassword<HRmanager>(output[1], "db_hr.json"))
+                                {
+                                    HRmanager.initHrFuncs(output[0]);
+                                    break;
+                                }
+                                else
+                                {
+
+                                    output.Clear();
+                                    Console.SetCursorPosition(8, 0);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(9, 1);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(0, max + 1);
+                                    Console.WriteLine("Неверный пароль");
+
+                                }
+                            }
+                            else if (Auth.CheckLogin<CargoManager>(output[0], "db_cargo.json") != null)
+                            {
+                                if (Auth.CheckPassword<CargoManager>(output[1], "db_cargo.json"))
+                                {
+                                    CargoManager.initCargoFuncs();
+                                    break;
+                                }
+                                else
+                                {
+                                    output.Clear();
+                                    Console.SetCursorPosition(8, 0);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(9, 1);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(0, max + 1);
+                                    Console.WriteLine("Неверный пароль");
+
+                                }
+                            }
+                            else if (Auth.CheckLogin<Accountant>(output[0], "db_account.json") != null)
+                            {
+                                if (Auth.CheckPassword<Accountant>(output[1], "db_account.json"))
+                                {
+                                    Accountant.initAccntntFuncs();
+                                    break;
+                                }
+                                else
+                                {
+                                    output.Clear();
+                                    Console.SetCursorPosition(8, 0);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(9, 1);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(0, max + 1);
+                                    Console.WriteLine("Неверный пароль");
+                                }
+
+                            }
+                            else if (Auth.CheckLogin<Cashier>(output[0], "db_cashier.json") != null)
+                            {
+                                if (Auth.CheckPassword<Cashier>(output[1], "db_cashier.json"))
+                                {
+                                    Cashier.initCashFuncs();
+                                    break;
+                                }
+                                else
+                                {
+                                    output.Clear();
+                                    Console.SetCursorPosition(8, 0);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(9, 1);
+                                    Console.WriteLine("                                    ");
+                                    Console.SetCursorPosition(0, max + 1);
+                                    Console.WriteLine("Неверный пароль");
+                                }
+                            }
+                            else
+                            {
+                                output.Clear();
+                                Console.SetCursorPosition(8, 0);
+                                Console.WriteLine("                                    ");
+                                Console.SetCursorPosition(9, 1);
+                                Console.WriteLine("                                    ");
+                                Console.SetCursorPosition(0, max + 1);
+                                Console.WriteLine("Пользователя не существует");
+
+                            }
+                        }
+                    }
+                }
+                else if ((int)key.Key == (int)keys.key_Esc)
+                {
+                    break;
+                }
             }
         }
-        public static void init()
+        private static void init()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            List<string> drivenames = new List<string>();
-
-            foreach (DriveInfo d in allDrives)
-            {
-                Console.Write("  ) Диск {0}", d.Name);
-                drivenames.Add(d.Name);
-                if (d.IsReady)
-                {
-                    string msg1 = $"  |- Файловая система: {d.DriveFormat}";
-                    string msg2 = $"  |- Общий объем: {Math.Round(d.TotalSize / Math.Pow(2, 30), 2)} Gb";
-                    string msg3 = $"  |- Объем свободного места: {Math.Round(d.TotalFreeSpace / Math.Pow(2, 30), 2)} Gb";
-                    Console.WriteLine($"{msg1,5}{msg2,5}{msg3,5}");
-                }
-            }
-            Cost arr = new Cost(0, 3);
-            arr.ShowArrow(0, 1, "->", drivenames);
+            ConsoleUi.drawAuthWin();
+            AuthL();
+            //Operations.Create(new Worker(1, 1234567890, 45000, 0, "k", "k", "l", "4", "21.01.2000"), "db_specs.json");
+            //Operations.Delete<Worker>("db_specs.json", 1);
         }
-        public static void Main()
+        private static void Main()
         {
             init();
         }
